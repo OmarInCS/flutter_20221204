@@ -121,6 +121,9 @@ class _QuizScreenState extends State<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    var isWide = MediaQuery.of(context).size.width > 500;
+
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -142,7 +145,7 @@ class _QuizScreenState extends State<QuizScreen> {
               itemCount: 4,
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+                crossAxisCount: isWide ? 4 : 2,
                 childAspectRatio: 3 / 2,
                 crossAxisSpacing: 8,
                 mainAxisSpacing: 8

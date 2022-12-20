@@ -1,6 +1,6 @@
 import 'package:app20221204/guess_game.dart';
 import 'package:app20221204/quiz_app/quiz_home_screen.dart';
-import 'package:app20221204/toggl_clone_app/screens/toggl_home_screen.dart';
+import 'package:app20221204/toggl_clone_app_db/screens/toggl_home_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

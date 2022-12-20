@@ -1,8 +1,9 @@
 
 import 'dart:math';
 
-import 'package:app20221204/toggl_clone_app/models/project.dart';
-import 'package:app20221204/toggl_clone_app/models/time_entry.dart';
+import 'package:app20221204/toggl_clone_app_db/db_handler.dart';
+import 'package:app20221204/toggl_clone_app_db/models/project.dart';
+import 'package:app20221204/toggl_clone_app_db/models/time_entry.dart';
 import 'package:app20221204/toggl_clone_app/screens/toggl_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -16,7 +17,17 @@ class AddEntryScreen extends StatefulWidget {
 
 class _AddEntryScreenState extends State<AddEntryScreen> {
 
-  var _timeEntry = TimeEntry(DateTime.now(), "");
+  var _timeEntry = TimeEntry(startTime: DateTime.now(), description: "");
+  var _db = DBHandler();
+  late Future<List<Project>> _projects;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _projects = _db.getAllProjects();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,15 +61,27 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
               onChanged: (value) => _timeEntry.description = value,
             ),
             SizedBox(height: 8,),
-            DropdownButtonFormField(
-              items: [
-                for (var p in Project.dummyProjects)
-                  DropdownMenuItem(
-                    child: Text(p.projectName),
-                    value: p,
-                  )
-              ],
-              onChanged: (value) => _timeEntry.project = value,
+            FutureBuilder(
+              future: _projects,
+              builder: (context, snapshot) {
+
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator(),);
+                }
+                else {
+                  var projects = snapshot.data!;
+                  return DropdownButtonFormField(
+                    items: [
+                      for (var p in projects)
+                        DropdownMenuItem(
+                          child: Text(p.projectName),
+                          value: p,
+                        )
+                    ],
+                    onChanged: (value) => _timeEntry.project = value,
+                  );
+                }
+              },
             )
           ],
         ),
@@ -67,14 +90,16 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           FloatingActionButton(
+            heroTag: null,
             child: Icon(Icons.play_arrow),
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TogglHomeScreen(runningEntry: _timeEntry,),));
+              // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TogglHomeScreen(runningEntry: _timeEntry,),));
             },
           ),
           SizedBox(height: 8,),
           FloatingActionButton(
+            heroTag: null,
             child: Icon(Icons.add),
             onPressed: _selectEndTime,
           ),
@@ -141,7 +166,7 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
           time.hour, time.minute
       );
 
-      TimeEntry.dummyEntries.add(_timeEntry);
+      // TimeEntry.dummyEntries.add(_timeEntry);
       Navigator.pop(context);
     }
 

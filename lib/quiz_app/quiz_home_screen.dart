@@ -9,34 +9,45 @@ class QuizHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var isWide = MediaQuery.of(context).size.width > 500;
+    var buttons = [
+      for (var level in _levels)
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Text(
+                  level
+              ),
+            ),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => QuizScreen(level),));
+            },
+
+          ),
+        )
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Quiz App"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
+        child: !isWide ?
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: buttons,
+          )
+            : Center(
+              child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            for (var level in _levels)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Text(
-                        level
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => QuizScreen(level),));
-                  },
-
-                ),
-              )
-          ],
+          children: buttons,
         ),
+            )
       ),
     );
   }

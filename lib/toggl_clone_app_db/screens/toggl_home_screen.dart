@@ -1,6 +1,6 @@
 
 import 'package:app20221204/toggl_clone_app/models/time_entry.dart';
-import 'package:app20221204/toggl_clone_app/screens/add_entry_screen.dart';
+import 'package:app20221204/toggl_clone_app_db/screens/add_entry_screen.dart';
 import 'package:app20221204/toggl_clone_app/widgets/app_bottom_sheet.dart';
 import 'package:app20221204/toggl_clone_app/widgets/time_entry_card.dart';
 import 'package:flutter/material.dart';
